@@ -38,7 +38,7 @@
             padding: 10px;
             border-radius: 50%;
             cursor: pointer;
-            z-index: 999; /* Nằm trên cùng */
+            z-index: 999;
             box-shadow: 0 4px 10px rgba(0,0,0,0.3);
         }
 
@@ -229,33 +229,36 @@
             100% { opacity: 1; transform: translateY(-3px); }
         }
 
-        /* SAO VÀ TRÁI TIM RƠI: NẰM LÊN TRÊN HẾT (z-index: 500) ĐỂ BẤM CỰC KỲ DỄ */
+        /* HIỆU ỨNG SAO RƠI ĐẬM HƠN, TO HƠN VÀ SÁNG RỰC RỠ */
         .star {
             position: fixed;
-            top: -40px;
+            top: -50px;
             z-index: 500;
             pointer-events: none;
             animation: fallStar linear forwards;
+            filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.9)) drop-shadow(0 0 20px rgba(255, 215, 0, 0.8));
         }
 
         @keyframes fallStar {
-            0% { transform: translateY(0) rotate(0deg); opacity: 0.2; }
-            100% { transform: translateY(105vh) rotate(360deg); opacity: 0; }
+            0% { transform: translateY(0) rotate(0deg) scale(0.9); opacity: 0.4; }
+            50% { opacity: 1; }
+            100% { transform: translateY(105vh) rotate(360deg) scale(1.1); opacity: 0; }
         }
 
         .secret-heart, .undertale-soul {
             position: fixed;
             top: -60px;
             font-size: 34px; 
-            padding: 24px;   /* Vùng chạm cực lớn, dễ bấm trúng bằng ngón tay */
+            padding: 24px;   
             cursor: pointer;
             user-select: none;
-            z-index: 501;    /* Phủ lên trên mọi thành phần giao diện khác */
+            z-index: 501;    
             touch-action: manipulation;
             animation: fallHeartSlow linear forwards;
             display: flex;
             justify-content: center;
             align-items: center;
+            filter: drop-shadow(0 0 8px rgba(255, 105, 180, 0.8));
         }
         
         .secret-heart:active, .undertale-soul:active { 
@@ -269,7 +272,6 @@
             100% { transform: translateY(105vh) rotate(-180deg); opacity: 0; }
         }
 
-        /* Khung thoại Undertale */
         #undertale-dialogue {
             position: fixed;
             bottom: 15px;
@@ -324,6 +326,10 @@
         <source src="https://vgmsite.com/soundtracks/undertale/juxedzpy/87%20Hopes%20and%20Dreams.mp3" type="audio/mpeg">
     </audio>
 
+    <audio id="soulSfx">
+        <source src="https://www.myinstants.com/media/sounds/undertale-determination.mp3" type="audio/mpeg">
+    </audio>
+
     <button class="music-btn" id="musicBtn">🎵</button>
 
     <div class="soul-tracker" id="soulTracker">
@@ -373,8 +379,10 @@
     <script>
         const bgAudio = document.getElementById('bgMusic');
         const victoryAudio = document.getElementById('victoryMusic');
+        const soulSfx = document.getElementById('soulSfx');
         bgAudio.volume = 0.6;
         victoryAudio.volume = 0.7;
+        soulSfx.volume = 0.9;
 
         let isMuted = false;
         let gameStarted = false;
@@ -382,6 +390,13 @@
         function playBackgroundMusic() {
             if (!isMuted) {
                 bgAudio.play().catch(e => console.log(e));
+            }
+        }
+
+        function playSoulSfx() {
+            if (!isMuted) {
+                soulSfx.currentTime = 0;
+                soulSfx.play().catch(e => console.log(e));
             }
         }
 
@@ -393,6 +408,7 @@
             if (isMuted) {
                 bgAudio.pause();
                 victoryAudio.pause();
+                soulSfx.pause();
             } else {
                 bgAudio.play();
             }
@@ -430,13 +446,14 @@
             star.classList.add('star');
             star.innerHTML = starIcons[Math.floor(Math.random() * starIcons.length)];
             star.style.left = Math.random() * window.innerWidth + 'px';
-            const duration = Math.random() * 3 + 3;
+            const duration = Math.random() * 2.5 + 2.5;
             star.style.animationDuration = duration + 's';
-            star.style.fontSize = (Math.random() * 10 + 10) + 'px';
+            // Tăng kích thước sao to hơn để nhìn rõ và đậm hơn
+            star.style.fontSize = (Math.random() * 14 + 14) + 'px';
             document.body.appendChild(star);
             setTimeout(() => star.remove(), duration * 1000);
         }
-        setInterval(createStar, 250);
+        setInterval(createStar, 200);
 
         function spawnSecretHeart() {
             if (!gameStarted) return;
@@ -449,7 +466,7 @@
             
             heart.addEventListener('click', (e) => {
                 e.stopPropagation(); 
-                playBackgroundMusic();
+                playSoulSfx();
                 alert('🌸 20/10 vui vẻ và hạnh phúc nha, đợi t nha mốt dẫn đi chơi tiếp 😎 !!!');
                 heart.remove();
             });
@@ -485,6 +502,7 @@
 
             soul.addEventListener('click', (e) => {
                 e.stopPropagation();
+                playSoulSfx();
                 collectedSouls.add(soulData.id);
                 const slot = document.getElementById(`slot-${soulData.id}`);
                 if (slot) slot.classList.add('collected');
