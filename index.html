@@ -3,13 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Chúc Mừng Ngày 20/10 </title>
-    <!-- Font Retro Pixel chuẩn phong cách Undertale -->
+    <title>Chúc Mừng Ngày 20/10</title>
     <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
     <style>
         * {
             box-sizing: border-box;
-            -webkit-tap-highlight-color: transparent; /* Chống chớp sáng khi chạm trên mobile */
+            -webkit-tap-highlight-color: transparent;
         }
         body {
             margin: 0;
@@ -27,7 +26,7 @@
             position: relative;
         }
 
-        /* Nút Bật/Tắt Âm Thanh tối ưu cho điện thoại */
+        /* Nút Bật/Tắt Âm Thanh */
         .music-btn {
             position: fixed;
             top: 15px;
@@ -35,15 +34,15 @@
             background: rgba(0, 0, 0, 0.75);
             border: 2px solid #ffffff;
             color: #ffffff;
-            font-size: 22px;
-            padding: 10px 14px;
+            font-size: 20px;
+            padding: 10px;
             border-radius: 50%;
             cursor: pointer;
-            z-index: 100;
+            z-index: 999; /* Nằm trên cùng */
             box-shadow: 0 4px 10px rgba(0,0,0,0.3);
         }
 
-        /* Bảng theo dõi 7 linh hồn Undertale (HUD) trên mobile */
+        /* Bảng theo dõi 7 linh hồn Undertale */
         .soul-tracker {
             position: fixed;
             top: 15px;
@@ -53,28 +52,18 @@
             border: 2px solid white;
             padding: 6px 12px;
             border-radius: 20px;
-            z-index: 100;
+            z-index: 999;
             display: none;
             gap: 8px;
             align-items: center;
             backdrop-filter: blur(4px);
-            max-width: 95vw;
-            overflow-x: auto;
-        }
-
-        .soul-tracker-title {
-            font-family: 'Press Start 2P', monospace;
-            font-size: 8px;
-            color: #ffff00;
-            display: none; /* Ẩn chữ trên màn hình rất nhỏ để tiết kiệm chỗ */
         }
 
         .soul-slot {
-            font-size: 20px;
+            font-size: 18px;
             opacity: 0.25;
             filter: grayscale(100%);
             transition: all 0.3s ease;
-            padding: 2px;
         }
 
         .soul-slot.collected {
@@ -83,14 +72,14 @@
             transform: scale(1.3);
         }
 
-        /* Cụm hoa cố định ở góc màn hình (thu nhỏ nhẹ trên mobile) */
+        /* Cụm hoa cố định ở góc */
         .corner-flowers-top-left {
             position: fixed;
             top: 10px;
             left: 10px;
             display: flex;
-            gap: 6px;
-            font-size: 30px;
+            gap: 4px;
+            font-size: 26px;
             z-index: 5;
             pointer-events: none;
         }
@@ -100,8 +89,8 @@
             bottom: 10px;
             right: 10px;
             display: flex;
-            gap: 6px;
-            font-size: 30px;
+            gap: 4px;
+            font-size: 26px;
             z-index: 5;
             pointer-events: none;
         }
@@ -111,15 +100,12 @@
             z-index: 10;
             cursor: pointer;
             width: 90vw;
-            max-width: 420px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
+            max-width: 400px;
         }
 
         .envelope {
             width: 100%;
-            height: 210px;
+            height: 200px;
             background: #ffffff;
             border-radius: 14px;
             box-shadow: 0 15px 35px rgba(0, 0, 0, 0.15);
@@ -137,45 +123,36 @@
             left: 0;
             width: 0;
             height: 0;
-            border-left: calc(45vw - 10px);
-            border-right: calc(45vw - 10px);
+            border-left: 200px solid transparent;
+            border-right: 200px solid transparent;
             border-top: 110px solid #ffb6c1;
-            max-border-left: 200px;
-            max-border-right: 200px;
             transform-origin: top;
             z-index: 3;
-        }
-
-        @media (min-width: 460px) {
-            .envelope::before {
-                border-left: 210px solid transparent;
-                border-right: 210px solid transparent;
-            }
         }
 
         .envelope-seal {
             position: absolute;
             z-index: 4;
-            font-size: 2.5rem;
+            font-size: 2.2rem;
             filter: drop-shadow(0 4px 6px rgba(0,0,0,0.2));
         }
 
         .click-hint {
             position: absolute;
-            bottom: -45px;
+            bottom: -40px;
             width: 100%;
             color: #2c3e50;
-            font-size: 0.9rem;
+            font-size: 0.85rem;
             font-weight: 600;
             text-shadow: 0 1px 2px rgba(255,255,255,0.8);
             animation: pulse 1.5s infinite alternate;
         }
 
         .container {
-            background: rgba(255, 255, 255, 0.92);
+            background: rgba(255, 255, 255, 0.94);
             backdrop-filter: blur(12px);
             -webkit-backdrop-filter: blur(12px);
-            padding: 25px 20px;
+            padding: 22px 18px;
             border-radius: 20px;
             border: 1px solid rgba(255, 255, 255, 0.6);
             box-shadow: 0 15px 35px rgba(0, 0, 0, 0.15);
@@ -184,7 +161,6 @@
             opacity: 0;
             transform: scale(0.8);
             transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            z-index: 10;
         }
 
         .card-wrapper.open .envelope { display: none; }
@@ -196,47 +172,47 @@
         }
 
         h1 {
-            font-size: 1.8rem;
-            margin-bottom: 12px;
+            font-size: 1.6rem;
+            margin-bottom: 10px;
             color: #d63031;
         }
 
         p {
-            font-size: 1rem;
-            line-height: 1.6;
+            font-size: 0.95rem;
+            line-height: 1.5;
             color: #2d3436;
-            margin-bottom: 12px;
+            margin-bottom: 10px;
         }
 
         .highlight { color: #e84393; font-weight: bold; }
-        .footer-text { font-size: 0.95rem; color: #0984e3; margin-top: 15px; font-weight: 600; }
+        .footer-text { font-size: 0.9rem; color: #0984e3; margin-top: 10px; font-weight: 600; }
 
         .game-prompt-box {
-            margin-top: 15px;
-            padding-top: 12px;
+            margin-top: 12px;
+            padding-top: 10px;
             border-top: 2px dashed rgba(214, 48, 49, 0.3);
         }
 
         .game-question {
-            font-size: 0.95rem;
+            font-size: 0.9rem;
             font-weight: 600;
             color: #2d3436;
-            margin-bottom: 10px;
+            margin-bottom: 8px;
         }
 
         .btn-group {
             display: flex;
             justify-content: center;
-            gap: 12px;
+            gap: 10px;
         }
 
         .game-btn {
             background: #ff7675;
             color: white;
             border: none;
-            padding: 12px 20px;
-            border-radius: 22px;
-            font-size: 0.9rem;
+            padding: 10px 16px;
+            border-radius: 20px;
+            font-size: 0.85rem;
             font-weight: bold;
             cursor: pointer;
             box-shadow: 0 4px 10px rgba(0,0,0,0.15);
@@ -245,7 +221,7 @@
 
         @keyframes float {
             0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-8px); }
+            50% { transform: translateY(-6px); }
         }
 
         @keyframes pulse {
@@ -253,98 +229,93 @@
             100% { opacity: 1; transform: translateY(-3px); }
         }
 
-        /* Ngôi sao rơi */
+        /* SAO VÀ TRÁI TIM RƠI: NẰM LÊN TRÊN HẾT (z-index: 500) ĐỂ BẤM CỰC KỲ DỄ */
         .star {
             position: fixed;
             top: -40px;
-            z-index: 2;
-            user-select: none;
+            z-index: 500;
             pointer-events: none;
             animation: fallStar linear forwards;
         }
 
         @keyframes fallStar {
-            0% { transform: translateY(0) rotate(0deg) scale(0.8); opacity: 0.2; }
-            50% { opacity: 0.8; transform: translateY(50vh) rotate(180deg) scale(1); }
-            100% { transform: translateY(105vh) rotate(360deg) scale(0.8); opacity: 0; }
+            0% { transform: translateY(0) rotate(0deg); opacity: 0.2; }
+            100% { transform: translateY(105vh) rotate(360deg); opacity: 0; }
         }
 
-        /* TĂNG VÙNG CHẠM (TOUCH TARGET) CHO TRÁI TIM TRÊN ĐIỆN THOẠI */
         .secret-heart, .undertale-soul {
             position: fixed;
             top: -60px;
-            font-size: 32px; /* Kích thước to rõ hơn trên điện thoại */
-            padding: 20px;   /* Tạo vùng đệm xung quanh giúp bấm dễ tuyệt đối */
+            font-size: 34px; 
+            padding: 24px;   /* Vùng chạm cực lớn, dễ bấm trúng bằng ngón tay */
             cursor: pointer;
             user-select: none;
-            z-index: 6;
+            z-index: 501;    /* Phủ lên trên mọi thành phần giao diện khác */
             touch-action: manipulation;
             animation: fallHeartSlow linear forwards;
             display: flex;
             justify-content: center;
             align-items: center;
-            transition: transform 0.1s ease;
         }
+        
         .secret-heart:active, .undertale-soul:active { 
-            transform: scale(1.6); 
+            transform: scale(1.5); 
         }
 
         @keyframes fallHeartSlow {
             0% { transform: translateY(0) rotate(0deg); opacity: 0; }
             10% { opacity: 1; }
-            85% { opacity: 0.9; }
+            90% { opacity: 0.9; }
             100% { transform: translateY(105vh) rotate(-180deg); opacity: 0; }
         }
 
-        /* Khung thoại Undertale tối ưu mobile */
+        /* Khung thoại Undertale */
         #undertale-dialogue {
             position: fixed;
-            bottom: 20px;
+            bottom: 15px;
             left: 50%;
             transform: translateX(-50%);
             width: 92%;
-            max-width: 620px;
+            max-width: 550px;
             background: #000000;
             border: 3px solid #ffffff;
             border-radius: 6px;
-            padding: 15px;
+            padding: 12px;
             z-index: 1000;
             display: none;
             box-shadow: 0 10px 25px rgba(0,0,0,0.6);
             text-align: left;
         }
 
-        .dialogue-content { display: flex; align-items: center; gap: 12px; }
-        .dialogue-soul { font-size: 28px; }
+        .dialogue-content { display: flex; align-items: center; gap: 10px; }
+        .dialogue-soul { font-size: 24px; }
         .dialogue-text {
             font-family: 'Press Start 2P', monospace;
             color: #ffffff;
-            font-size: 11px;
-            line-height: 1.6;
+            font-size: 10px;
+            line-height: 1.5;
             word-break: break-word;
         }
 
         #victory-banner {
             position: fixed;
-            top: 70px;
+            top: 65px;
             left: 50%;
             transform: translateX(-50%);
             background: rgba(0, 0, 0, 0.9);
             border: 2px solid #ffff00;
             color: #ffff00;
             font-family: 'Press Start 2P', monospace;
-            font-size: 10px;
-            padding: 10px 16px;
+            font-size: 9px;
+            padding: 8px 14px;
             border-radius: 6px;
-            z-index: 100;
+            z-index: 999;
             display: none;
-            box-shadow: 0 0 15px rgba(255, 255, 0, 0.6);
         }
     </style>
 </head>
 <body>
 
-    <!-- Thẻ phát nhạc nền trực tiếp trên web -->
     <audio id="bgMusic" loop>
         <source src="https://vgmsite.com/soundtracks/undertale/juxedzpy/78%20SAVE%20The%20World.mp3" type="audio/mpeg">
     </audio>
@@ -353,34 +324,29 @@
         <source src="https://vgmsite.com/soundtracks/undertale/juxedzpy/87%20Hopes%20and%20Dreams.mp3" type="audio/mpeg">
     </audio>
 
-    <!-- Nút Bật/Tắt Âm Thanh -->
-    <button class="music-btn" id="musicBtn" title="Bật/Tắt Âm Thanh">🎵</button>
+    <button class="music-btn" id="musicBtn">🎵</button>
 
-    <!-- Bảng HUD theo dõi 7 linh hồn Undertale -->
     <div class="soul-tracker" id="soulTracker">
-        <span class="soul-slot" id="slot-0" title="Determination">❤️</span>
-        <span class="soul-slot" id="slot-1" title="Bravery">🧡</span>
-        <span class="soul-slot" id="slot-2" title="Justice">💛</span>
-        <span class="soul-slot" id="slot-3" title="Kindness">💚</span>
-        <span class="soul-slot" id="slot-4" title="Patience">🩵</span>
-        <span class="soul-slot" id="slot-5" title="Integrity">💙</span>
-        <span class="soul-slot" id="slot-6" title="Perseverance">💜</span>
+        <span class="soul-slot" id="slot-0">❤️</span>
+        <span class="soul-slot" id="slot-1">🧡</span>
+        <span class="soul-slot" id="slot-2">💛</span>
+        <span class="soul-slot" id="slot-3">💚</span>
+        <span class="soul-slot" id="slot-4">🩵</span>
+        <span class="soul-slot" id="slot-5">💙</span>
+        <span class="soul-slot" id="slot-6">💜</span>
     </div>
 
     <div id="victory-banner">✨ YOU SAVED THE WORLD! ✨</div>
 
-    <!-- Hoa cố định góc -->
     <div class="corner-flowers-top-left">🌿🍀</div>
     <div class="corner-flowers-bottom-right">🌺🌹</div>
 
     <div class="card-wrapper" id="cardWrapper">
-        <!-- Phong thư ban đầu -->
         <div class="envelope" id="envelope">
             <div class="envelope-seal">🌟</div>
             <div class="click-hint">✨ Chạm vào lá thư để mở ✨</div>
         </div>
 
-        <!-- Nội dung bức thư kèm câu hỏi tham gia trò chơi -->
         <div class="container">
             <h1>Happy Women's Day! ✨💖</h1>
             <p>Chúc <span class="highlight">My ngố</span> một ngày 20/10 thật nhiều niềm vui, luôn hạnh phúc bên gia đình và bạn bè, chúc My sắp tới sẽ đạt điểm cao trong các bạn kiểm tra và sớm khỏi bệnh nha !!!</p>
@@ -393,11 +359,10 @@
                 </div>
             </div>
 
-            <p class="footer-text" style="margin-top: 12px;">✨ From N94 ✨</p>
+            <p class="footer-text">✨ From N94 ✨</p>
         </div>
     </div>
 
-    <!-- Hộp thoại Undertale -->
     <div id="undertale-dialogue">
         <div class="dialogue-content">
             <div class="dialogue-soul" id="boxSoul">❤️</div>
@@ -416,7 +381,7 @@
 
         function playBackgroundMusic() {
             if (!isMuted) {
-                bgAudio.play().catch(e => console.log("Chờ tương tác:", e));
+                bgAudio.play().catch(e => console.log(e));
             }
         }
 
@@ -425,7 +390,6 @@
             e.stopPropagation();
             isMuted = !isMuted;
             musicBtn.innerHTML = isMuted ? '🔇' : '🎵';
-            
             if (isMuted) {
                 bgAudio.pause();
                 victoryAudio.pause();
@@ -450,10 +414,8 @@
             e.stopPropagation();
             playBackgroundMusic();
             gameStarted = true;
-            
             soulTracker.style.display = 'flex';
             document.querySelector('.game-prompt-box').style.display = 'none';
-            
             alert('✨ Thử thách bắt đầu! Hãy chạm vào các trái tim linh hồn rơi xuống màn hình nhé!');
         });
 
@@ -462,31 +424,27 @@
             alert('Ơ kìa, thử thách thú vị lắm mà! Thử bấm "Tham gia ngay" đi nào! 😄');
         });
 
-        // Tạo ngôi sao rơi
         const starIcons = ['✨', '🌟', '⭐', '💫'];
         function createStar() {
             const star = document.createElement('div');
             star.classList.add('star');
             star.innerHTML = starIcons[Math.floor(Math.random() * starIcons.length)];
             star.style.left = Math.random() * window.innerWidth + 'px';
-            const duration = Math.random() * 2 + 3;
+            const duration = Math.random() * 3 + 3;
             star.style.animationDuration = duration + 's';
-            star.style.fontSize = (Math.random() * 12 + 10) + 'px';
+            star.style.fontSize = (Math.random() * 10 + 10) + 'px';
             document.body.appendChild(star);
             setTimeout(() => star.remove(), duration * 1000);
         }
-        setInterval(createStar, 220);
+        setInterval(createStar, 250);
 
-        // Trái tim hồng bí mật
         function spawnSecretHeart() {
             if (!gameStarted) return;
-
             const heart = document.createElement('div');
             heart.classList.add('secret-heart');
             heart.innerHTML = '💖';
-            heart.style.left = Math.random() * (window.innerWidth - 70) + 'px';
-            
-            const heartDuration = Math.random() * 3 + 12; 
+            heart.style.left = Math.random() * (window.innerWidth - 60) + 'px';
+            const heartDuration = Math.random() * 4 + 13; 
             heart.style.animationDuration = heartDuration + 's';
             
             heart.addEventListener('click', (e) => {
@@ -501,30 +459,28 @@
         }
         setInterval(spawnSecretHeart, 8000);
 
-        // 7 Linh hồn Undertale tối ưu cảm ứng
         const undertaleSouls = [
-            { id: 0, emoji: '❤️', color: '#ff0000', text: 'You are filled with determination.' },
-            { id: 1, emoji: '🧡', color: '#ffa500', text: 'You are filled with bravery.' },
-            { id: 2, emoji: '💛', color: '#ffff00', text: 'You are filled with justice.' },
-            { id: 3, emoji: '💚', color: '#00ff00', text: 'You are filled with kindness.' },
-            { id: 4, emoji: '🩵', color: '#00ffff', text: 'You are filled with patience.' },
-            { id: 5, emoji: '💙', color: '#0000ff', text: 'You are filled with integrity.' },
-            { id: 6, emoji: '💜', color: '#9933ff', text: 'You are filled with perseverance.' }
+            { id: 0, emoji: '❤️', text: 'You are filled with determination.' },
+            { id: 1, emoji: '🧡', text: 'You are filled with bravery.' },
+            { id: 2, emoji: '💛', text: 'You are filled with justice.' },
+            { id: 3, emoji: '💚', text: 'You are filled with kindness.' },
+            { id: 4, emoji: '🩵', text: 'You are filled with patience.' },
+            { id: 5, emoji: '💙', text: 'You are filled with integrity.' },
+            { id: 6, emoji: '💜', text: 'You are filled with perseverance.' }
         ];
 
         const collectedSouls = new Set();
 
         function spawnUndertaleSoul() {
             if (!gameStarted) return;
-
             const soulData = undertaleSouls[Math.floor(Math.random() * undertaleSouls.length)];
             
             const soul = document.createElement('div');
             soul.classList.add('undertale-soul');
             soul.innerHTML = soulData.emoji;
-            soul.style.left = Math.random() * (window.innerWidth - 70) + 'px';
+            soul.style.left = Math.random() * (window.innerWidth - 60) + 'px';
             
-            const duration = Math.random() * 3 + 12; 
+            const duration = Math.random() * 4 + 13; 
             soul.style.animationDuration = duration + 's';
 
             soul.addEventListener('click', (e) => {
@@ -544,7 +500,7 @@
             document.body.appendChild(soul);
             setTimeout(() => { if (soul.parentNode) soul.remove(); }, duration * 1000);
         }
-        setInterval(spawnUndertaleSoul, 4500);
+        setInterval(spawnUndertaleSoul, 5000);
 
         let dialogueTimeout = null;
         function showUndertaleDialogue(emoji, text) {
