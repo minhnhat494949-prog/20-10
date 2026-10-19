@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Chúc Mừng Ngày 20/10 - Dành Cho Người Tôi Thương</title>
+    <title>Chúc Mừng Ngày 20/10 </title>
     <!-- Font Retro Pixel chuẩn phong cách Undertale -->
     <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
     <style>
@@ -370,6 +370,15 @@
 </head>
 <body>
 
+    <!-- Thẻ phát nhạc nền trực tiếp -->
+    <audio id="bgMusic" loop>
+        <source src="https://ia801509.us.archive.org/15/items/UndertaleOST/78%20SAVE%20The%20World.mp3" type="audio/mpeg">
+    </audio>
+
+    <audio id="victoryMusic" loop>
+        <source src="https://ia801509.us.archive.org/15/items/UndertaleOST/87%20Hopes%20and%20Dreams.mp3" type="audio/mpeg">
+    </audio>
+
     <!-- Nút Bật/Tắt Âm Thanh -->
     <button class="music-btn" id="musicBtn" title="Bật/Tắt Âm Thanh">🎵</button>
 
@@ -401,10 +410,10 @@
         <!-- Nội dung bức thư kèm câu hỏi tham gia trò chơi -->
         <div class="container">
             <h1>Happy Women's Day! ✨💖</h1>
-            <p>Chúc <span class="highlight">[My ngố]</span> một ngày 20/10 thật nhiều niềm vui, luôn hạnh phúc bên gia đình và bạn bè, chúc My sắp tới sẽ đạt điểm cao trong các bạn kiểm tra và sớm khỏi bệnh nha !!!</p>
+            <p>Chúc <span class="highlight">My ngố</span> một ngày 20/10 thật nhiều niềm vui, luôn hạnh phúc bên gia đình và bạn bè, chúc My sắp tới sẽ đạt điểm cao trong các bạn kiểm tra và sớm khỏi bệnh nha !!!</p>
             
             <div class="game-prompt-box">
-                <div class="game-question">🎮 My có muốn tham gia thử thách nhặt lại các mảnh linh hồn không?</div>
+                <div class="game-question">🎮 My có muốn tham gia thử thách thu thập các mảnh linh hồn không?</div>
                 <div class="btn-group">
                     <button class="game-btn" id="joinGameBtn">Tham gia ngay ✨</button>
                     <button class="game-btn secondary" id="refuseGameBtn">Từ chối 😢</button>
@@ -424,10 +433,16 @@
     </div>
 
     <script>
+        const bgAudio = document.getElementById('bgMusic');
+        const victoryAudio = document.getElementById('victoryMusic');
+        bgAudio.volume = 0.6;
+        victoryAudio.volume = 0.7;
+
+        let isMuted = false;
+        let gameStarted = false;
+
         const AudioContext = window.AudioContext || window.webkitAudioContext;
         let audioCtx = null;
-        let isMuted = false;
-        let gameStarted = false; // Trạng thái kiểm tra xem đã bấm tham gia chưa
 
         function initAudio() {
             if (!audioCtx) {
@@ -435,6 +450,11 @@
             }
             if (audioCtx.state === 'suspended') {
                 audioCtx.resume();
+            }
+            if (!isMuted && bgAudio.paused) {
+                bgAudio.play().catch(error => {
+                    console.log("Cần tương tác để phát nhạc:", error);
+                });
             }
         }
 
@@ -444,7 +464,14 @@
             initAudio();
             isMuted = !isMuted;
             musicBtn.innerHTML = isMuted ? '🔇' : '🎵';
-            if (!isMuted) playUndertaleSound();
+            
+            if (isMuted) {
+                bgAudio.pause();
+                victoryAudio.pause();
+            } else {
+                bgAudio.play();
+                playUndertaleSound();
+            }
         });
 
         function playUndertaleSound() {
@@ -471,31 +498,6 @@
             osc.stop(now + 0.45);
         }
 
-        function startRetroBgMusic() {
-            initAudio();
-            if (isMuted || !audioCtx) return;
-
-            const now = audioCtx.currentTime;
-            const notes = [261.63, 329.63, 392.00, 523.25, 440.00, 349.23, 392.00, 293.66];
-            
-            notes.forEach((freq, index) => {
-                const osc = audioCtx.createOscillator();
-                const gain = audioCtx.createGain();
-                osc.type = 'triangle';
-                osc.frequency.value = freq;
-
-                const startTime = now + (index * 0.25);
-                gain.gain.setValueAtTime(0.08, startTime);
-                gain.gain.exponentialRampToValueAtTime(0.001, startTime + 0.22);
-
-                osc.connect(gain);
-                gain.connect(audioCtx.destination);
-
-                osc.start(startTime);
-                osc.stop(startTime + 0.23);
-            });
-        }
-
         // Mở phong thư khi click
         const cardWrapper = document.getElementById('cardWrapper');
         cardWrapper.addEventListener('click', () => {
@@ -514,12 +516,9 @@
             e.stopPropagation();
             initAudio();
             playUndertaleSound();
-            gameStarted = true; // Kích hoạt trò chơi
+            gameStarted = true;
             
-            // Hiện thanh sưu tập linh hồn phía trên
             soulTracker.style.display = 'flex';
-
-            // Ẩn phần câu hỏi gọi mời đi để hiển thị lời chúc trọn vẹn
             document.querySelector('.game-prompt-box').style.display = 'none';
             
             alert('✨ Thử thách bắt đầu! Hãy để ý các trái tim linh hồn rơi xuống màn hình nhé!');
@@ -545,9 +544,9 @@
         }
         setInterval(createStar, 180);
 
-        // Trái tim hồng bí mật (chỉ rơi khi đã bắt đầu game)
+        // Trái tim hồng bí mật
         function spawnSecretHeart() {
-            if (!gameStarted) return; // Nếu chưa bấm tham gia thì chưa cho rơi
+            if (!gameStarted) return;
 
             const heart = document.createElement('div');
             heart.classList.add('secret-heart');
@@ -584,7 +583,7 @@
         const collectedSouls = new Set();
 
         function spawnUndertaleSoul() {
-            if (!gameStarted) return; // Chỉ rơi khi người nhận đã bấm tham gia trò chơi
+            if (!gameStarted) return;
 
             const soulData = undertaleSouls[Math.floor(Math.random() * undertaleSouls.length)];
             
@@ -637,8 +636,8 @@
             const banner = document.getElementById('victory-banner');
             if (banner) banner.style.display = 'block';
 
-            startRetroBgMusic();
-            setInterval(startRetroBgMusic, 2200);
+            bgAudio.pause();
+            if (!isMuted) victoryAudio.play();
         }
     </script>
 </body>
